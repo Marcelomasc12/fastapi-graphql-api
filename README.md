@@ -1,7 +1,10 @@
 # fastapi-graphql-api
+
 API GraphQL com FastAPI, Strawberry, PostgreSQL e testes automatizados.
 
-Estrutura esperada:
+## Estrutura esperada
+
+```txt
 fastapi-graphql-api/
 │
 ├── app/
@@ -18,3 +21,4 @@ fastapi-graphql-api/
 ├── requirements.txt
 ├── README.md
 └── .gitignore
+```
