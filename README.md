@@ -1,6 +1,27 @@
-# fastapi-graphql-api
+# FastAPI GraphQL API
 
-API GraphQL com FastAPI, Strawberry, PostgreSQL e testes automatizados.
+Projeto da disciplina de Teste e Qualidade de Software.
 
-## Estrutura esperada
+## Tecnologias
 
+- FastAPI
+- GraphQL (Strawberry)
+- Pydantic
+- Pytest
+- Docker
+
+## Endpoints
+
+### Health Check
+
+GET /health
+
+### GraphQL
+
+POST /graphql
+
+## Executar
+
+pip install -r requirements.txt
+
+uvicorn app.main:app --reload
