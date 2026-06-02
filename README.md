@@ -167,5 +167,6 @@ A cada push para a branch main:
 
 ## Autor
 
-Marcelo Negrão Mascarenhas Filho
+Marcelo Negrão Mascarenhas Filho e Luisa Castro
+
 Engenharia de Software
