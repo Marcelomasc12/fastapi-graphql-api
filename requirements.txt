@@ -4,3 +4,5 @@ strawberry-graphql[fastapi]
 pydantic
 pytest
 httpx
+sqlalchemy
+psycopg[binary]
