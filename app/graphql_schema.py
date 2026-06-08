@@ -1,9 +1,12 @@
 import strawberry
 
-posts = []
+from app.database import SessionLocal
+from app.models import PostModel
+
 
 @strawberry.type
 class Post:
+    id: int
     title: str
     content: str
 
@@ -13,26 +16,21 @@ class Query:
 
     @strawberry.field
     def get_posts(self) -> list[Post]:
-        return [Post(**post) for post in posts]
+        db = SessionLocal()
+
+        try:
+            posts = db.query(PostModel).all()
+
+            return [
+                Post(
+                    id=post.id,
+                    title=post.title,
+                    content=post.content
+                )
+                for post in posts
+            ]
+        finally:
+            db.close()
 
 
-@strawberry.type
-class Mutation:
-
-    @strawberry.mutation
-    def create_post(self, title: str, content: str) -> Post:
-
-        post = {
-            "title": title,
-            "content": content
-        }
-
-        posts.append(post)
-
-        return Post(**post)
-
-
-schema = strawberry.Schema(
-    query=Query,
-    mutation=Mutation
-)
+schema = strawberry.Schema(query=Query)

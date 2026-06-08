@@ -1,7 +1,12 @@
+import os
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-DATABASE_URL = "postgresql+psycopg://postgres:postgres@127.0.0.1:5432/fastapi_graphql"
+DATABASE_URL = os.getenv(
+    "DATABASE_URL",
+    "postgresql+psycopg://app:app@127.0.0.1:5432/fastapi_graphql"
+)
 
 engine = create_engine(DATABASE_URL)
 
@@ -13,8 +18,10 @@ SessionLocal = sessionmaker(
 
 Base = declarative_base()
 
+
 def get_db():
     db = SessionLocal()
+
     try:
         yield db
     finally:
