@@ -310,9 +310,10 @@ A pipeline é executada em:
 
 ---
 
-# Autor
+# Autores
 
 Marcelo Negrão Mascarenhas Filho
+
 Luisa Castro Santos
 
 Engenharia de Software
