@@ -7,7 +7,7 @@ from app.schemas import PostCreate, PostUpdate
 
 router = APIRouter()
 
-
+#DEfini os endpoints
 @router.get("/health")
 def health():
     return {

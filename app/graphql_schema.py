@@ -10,7 +10,7 @@ class Post:
     title: str
     content: str
 
-
+#Defini as consultas do graph
 @strawberry.type
 class Query:
 

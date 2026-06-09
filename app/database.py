@@ -2,7 +2,7 @@ import os
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
-
+#conecta ao banco de dados
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
     "postgresql+psycopg://app:app@127.0.0.1:5432/fastapi_graphql"
