@@ -1,48 +1,33 @@
-# FastAPI GraphQL API
+# FastAPI + GraphQL API
 
-Projeto desenvolvido para a disciplina de Teste e Qualidade de Software.
-
-## Descrição
-
-Esta aplicação implementa uma API utilizando FastAPI, PostgreSQL, Docker e GraphQL.
-
-O projeto possui:
-
-* API REST para gerenciamento de posts
-* API GraphQL para consultas
-* Banco de dados PostgreSQL
-* Testes automatizados com Pytest
-* Mock de serviço externo
-* Pipeline CI com GitHub Actions
-* Quality Gate com cobertura mínima de 90% dos resolvers GraphQL
+Projeto desenvolvido para a disciplina de Testes de Software, utilizando FastAPI, GraphQL, PostgreSQL, Docker e Pytest.
 
 ---
 
-# Tecnologias Utilizadas
+# Objetivo
+# Aula 03
+Validar o funcionamento da aplicação através de:
 
-* Python 3.12
-* FastAPI
-* Strawberry GraphQL
-* SQLAlchemy
-* PostgreSQL
-* Docker
-* Docker Compose
-* Pytest
-* Pytest-Cov
-* GitHub Actions
+- Testes de Integração
+- Teste E2E (End-to-End)
+- Teste de Mutação
+- Cobertura de testes
 
 ---
 
 # Estrutura do Projeto
 
-```text
-fastapi-graphql-api/
+```
+fastapi-graphql-api
 │
-├── .github/
-│   └── workflows/
+├── .github
+│   └── workflows
 │       └── ci.yml
 │
-├── app/
+├── .vscode
+│
+├── app
+│   ├── __init__.py
 │   ├── database.py
 │   ├── external_service.py
 │   ├── graphql_schema.py
@@ -51,272 +36,197 @@ fastapi-graphql-api/
 │   ├── routes.py
 │   └── schemas.py
 │
-├── tests/
-│   ├── test_external_service.py
-│   ├── test_graphql.py
-│   └── test_routes.py
+├── tests
+│   │
+│   ├── integracao
+│   │   ├── __init__.py
+│   │   ├── test_external_service.py
+│   │   ├── test_graphql.py
+│   │   └── test_routes.py
+│   │
+│   ├── e2e
+│   │   ├── __init__.py
+│   │   └── test_e2e_graphql.py
+│   │
+│   └── mutacao
+│       ├── __init__.py
+│       ├── relatorio_mutacao.md
+│       └── test_mutacao_fluxo_completo.py
 │
+├── .gitignore
 ├── docker-compose.yml
 ├── Dockerfile
-├── requirements.txt
-└── README.md
+├── README.md
+└── requirements.txt
 ```
 
 ---
 
-# Como Executar o Projeto
-
-## Construir e iniciar os containers
+# Subir os Containers
 
 ```bash
-docker compose up --build
+docker compose up -d --build
 ```
-
-Utilize quando:
-
-* Executar o projeto pela primeira vez
-* Alterar o Dockerfile
-* Alterar dependências do requirements.txt
-* Alterar o docker-compose.yml
 
 ---
 
-## Iniciar containers já criados
-
-```bash
-docker compose up
-```
-
-Utilize quando os containers já existem e nenhuma configuração foi alterada.
-
----
-
-## Executar em segundo plano
-
-```bash
-docker compose up -d
-```
-
-Mantém a aplicação rodando sem ocupar o terminal.
-
----
-
-## Encerrar a aplicação
+# Parar os Containers
 
 ```bash
 docker compose down
 ```
 
-Este comando:
-
-* Para os containers
-* Remove os containers
-* Remove a rede criada pelo Docker Compose
-
-Os dados do PostgreSQL permanecem salvos porque estão armazenados no volume:
-
-```text
-postgres_data
-```
-
 ---
 
-## Remover containers e apagar os dados do banco
+# Executar todos os testes
 
 ```bash
-docker compose down -v
-```
-
-Atenção:
-
-Esse comando remove os volumes e apaga todos os dados armazenados no PostgreSQL.
-
----
-
-# Endpoints Disponíveis
-
-## Swagger
-
-Interface para testar os endpoints REST.
-
-```text
-http://localhost:8000/docs
+docker compose exec api python -m pytest tests -v
 ```
 
 ---
 
-## GraphQL Playground
-
-Interface para executar queries GraphQL.
-
-```text
-http://localhost:8000/graphql
-```
-
----
-
-# Endpoints REST
-
-## Verificar saúde da API
-
-```http
-GET /health
-```
-
-Resposta:
-
-```json
-{
-  "status": "ok",
-  "message": "API funcionando"
-}
-```
-
----
-
-## Criar Post
-
-```http
-POST /posts
-```
-
-Exemplo:
-
-```json
-{
-  "title": "Aprendendo FastAPI",
-  "content": "Meu primeiro post salvo no PostgreSQL."
-}
-```
-
----
-
-## Atualizar Post
-
-```http
-PUT /posts/{id}
-```
-
-Exemplo:
-
-```json
-{
-  "title": "Título Atualizado",
-  "content": "Conteúdo atualizado"
-}
-```
-
----
-
-## Excluir Post
-
-```http
-DELETE /posts/{id}
-```
-
----
-
-# Consulta GraphQL
-
-Exemplo:
-
-```graphql
-query {
-  getPosts {
-    id
-    title
-    content
-  }
-}
-```
-
----
-
-# Executando os Testes
-
-## Executar todos os testes
+# Executar apenas os testes de Integração
 
 ```bash
-docker compose exec api pytest -v
+docker compose exec api python -m pytest tests/integracao -v
 ```
-
-Utilizamos o comando acima porque os testes devem rodar dentro do mesmo ambiente da aplicação (container da API).
 
 ---
 
-## Executar cobertura dos resolvers GraphQL
+# Executar apenas o teste E2E
 
 ```bash
-docker compose exec api pytest --cov=app.graphql_schema --cov-report=term-missing
+docker compose exec api python -m pytest tests/e2e/test_e2e_graphql.py -v
 ```
 
 ---
 
-# Quality Gate
+# Executar apenas o teste de Mutação
 
-O projeto possui um Quality Gate configurado para os resolvers GraphQL.
-
-Cobertura mínima exigida:
-
-```text
-90%
+```bash
+docker compose exec api python -m pytest tests/mutacao/test_mutacao_fluxo_completo.py -v -s
 ```
 
-Caso a cobertura fique abaixo de 90%, a execução falha.
+O parâmetro `-s` permite visualizar o resultado do teste de mutação no terminal.
 
 ---
 
-# Pipeline CI
+# Executar todos os testes com cobertura
 
-Arquivo:
-
-```text
-.github/workflows/ci.yml
+```bash
+docker compose exec api python -m pytest tests --cov=app --cov-report=term-missing --cov-fail-under=90 -v
 ```
 
-A pipeline executa automaticamente:
+Esse comando exibe:
 
-1. Checkout do código
-2. Build dos containers
-3. Inicialização da aplicação
-4. Execução dos testes
-5. Validação da cobertura mínima dos resolvers GraphQL
-6. Encerramento dos containers
+- Quantidade de testes executados;
+- Cobertura individual de cada arquivo da aplicação;
+- Cobertura total do projeto;
+- Falha caso a cobertura seja inferior a 90%.
 
-A pipeline é executada em:
+---
 
-* Push para a branch main
-* Pull Request para a branch main
+# Atualizar Dependências
+
+Após adicionar uma nova biblioteca ao `requirements.txt`, reconstruir os containers:
+
+```bash
+docker compose up -d --build
+```
+
+---
+
+# Atualizar a Pipeline
+
+Após concluir as alterações:
+
+```bash
+git add .
+git commit -m "Aula 3 - Testes E2E e Mutação"
+git push origin main
+```
+
+A pipeline do GitHub Actions será executada automaticamente.
 
 ---
 
 # Testes Implementados
 
-## REST
+## Testes de Integração
 
-* Health Check
-* Criação de post
-* Validação de dados inválidos (422)
-* Atualização de post inexistente (404)
-* Exclusão de post inexistente (404)
+- Rotas REST
+- Consultas GraphQL
+- Serviço externo (Mock)
 
-## GraphQL
+---
 
-* Consulta de posts através do resolver getPosts
+## Teste E2E
 
-## Serviço Externo
+Fluxo completo validado:
 
-* Mock de API externa utilizando monkeypatch
+```
+Criar Post (REST)
+        ↓
+Salvar no Banco
+        ↓
+Consultar pelo GraphQL
+        ↓
+Atualizar Post (REST)
+        ↓
+Consultar novamente pelo GraphQL
+        ↓
+Excluir Post (REST)
+        ↓
+Confirmar remoção pelo GraphQL
+```
+
+---
+
+## Teste de Mutação
+
+Foi inserido propositalmente o seguinte bug:
+
+```python
+posts = db.query(PostModel).all()
+```
+
+foi alterado para
+
+```python
+posts = []
+```
+
+Após inserir a mutação, o teste E2E é executado automaticamente.
+
+Resultado esperado:
+
+```
+========== TESTE DE MUTAÇÃO ==========
+Mutação aplicada: GraphQL retorna lista vazia.
+Resultado do E2E: FAILED (esperado)
+Conclusão: O E2E detectou o bug.
+```
+
+Isso demonstra que o teste E2E consegue identificar alterações que quebram o comportamento esperado da aplicação.
+
+---
+
+# Tecnologias Utilizadas
+
+- Python 3.12
+- FastAPI
+- GraphQL (Strawberry)
+- SQLAlchemy
+- PostgreSQL
+- Docker
+- Docker Compose
+- Pytest
+- Pytest-Cov
 
 ---
 
 # Autores
 
-Marcelo Negrão Mascarenhas Filho
-
-Luisa Castro Santos
-
-Engenharia de Software
-
-Disciplina: Teste e Qualidade de Software
-
+- Marcelo Negrão Mascarenhas
+- Luisa Castro

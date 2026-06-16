@@ -22,7 +22,7 @@ jobs:
         run: sleep 15
 
       - name: Rodar testes e validar cobertura dos resolvers GraphQL
-        run: docker compose exec -T api pytest --cov=app.graphql_schema --cov-report=term-missing --cov-fail-under=90
+        run: docker compose exec -T api pytest --cov=app --cov-report=term-missing --cov-fail-under=90
 
       - name: Encerrar containers
         if: always()
