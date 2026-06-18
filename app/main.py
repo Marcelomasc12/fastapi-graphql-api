@@ -5,10 +5,16 @@ from app.database import Base, engine
 from app.graphql_schema import schema
 from app.models import PostModel
 from app.routes import router
+from app.logging_config import configure_logging
+from app.metrics import setup_metrics
+
+configure_logging()
 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="FastAPI GraphQL API")
+
+setup_metrics(app)
 
 app.include_router(router)
 

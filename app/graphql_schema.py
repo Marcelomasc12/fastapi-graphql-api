@@ -2,6 +2,7 @@ import strawberry
 
 from app.database import SessionLocal
 from app.models import PostModel
+from app.metrics import consultas_graphql_total, posts_ativos
 
 
 @strawberry.type
@@ -10,16 +11,20 @@ class Post:
     title: str
     content: str
 
-#Defini as consultas do graph
+
 @strawberry.type
 class Query:
 
     @strawberry.field
     def get_posts(self) -> list[Post]:
+        consultas_graphql_total.inc()
+
         db = SessionLocal()
 
         try:
             posts = db.query(PostModel).all()
+
+            posts_ativos.set(len(posts))
 
             return [
                 Post(
@@ -29,6 +34,7 @@ class Query:
                 )
                 for post in posts
             ]
+
         finally:
             db.close()
 

@@ -4,10 +4,16 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models import PostModel
 from app.schemas import PostCreate, PostUpdate
+from app.metrics import (
+    posts_criados_total,
+    posts_atualizados_total,
+    posts_deletados_total,
+    posts_ativos
+)
 
 router = APIRouter()
 
-#DEfini os endpoints
+
 @router.get("/health")
 def health():
     return {
@@ -26,6 +32,9 @@ def create_post(post: PostCreate, db: Session = Depends(get_db)):
     db.add(new_post)
     db.commit()
     db.refresh(new_post)
+
+    posts_criados_total.inc()
+    posts_ativos.set(db.query(PostModel).count())
 
     return new_post
 
@@ -47,6 +56,9 @@ def update_post(
     db.commit()
     db.refresh(existing_post)
 
+    posts_atualizados_total.inc()
+    posts_ativos.set(db.query(PostModel).count())
+
     return existing_post
 
 
@@ -59,6 +71,9 @@ def delete_post(post_id: int, db: Session = Depends(get_db)):
 
     db.delete(existing_post)
     db.commit()
+
+    posts_deletados_total.inc()
+    posts_ativos.set(db.query(PostModel).count())
 
     return {
         "message": "Post deletado com sucesso"
