@@ -9,3 +9,4 @@ psycopg[binary]
 requests
 pytest-cov
 prometheus-client
+black

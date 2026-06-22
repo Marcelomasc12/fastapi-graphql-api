@@ -21,6 +21,9 @@ jobs:
       - name: Aguardar banco iniciar
         run: sleep 15
 
+      - name: Verificar formatação do código
+        run: docker compose exec -T api black --check app tests
+
       - name: Rodar testes e validar cobertura dos resolvers GraphQL
         run: docker compose exec -T api python -m pytest tests --cov=app --cov-report=term-missing --cov-fail-under=90 -v
 

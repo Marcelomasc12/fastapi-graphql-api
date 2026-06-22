@@ -16,10 +16,7 @@ def test_get_posts_graphql():
     }
     """
 
-    response = client.post(
-        "/graphql",
-        json={"query": query}
-    )
+    response = client.post("/graphql", json={"query": query})
 
     assert response.status_code == 200
     assert "data" in response.json()
