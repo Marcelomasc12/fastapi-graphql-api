@@ -14,7 +14,108 @@ Projeto desenvolvido para a disciplina **Teste e Qualidade de Software**, utiliz
 **Disciplina:** Teste e Qualidade de Software
 
 ---
+# 🏗️ Arquitetura da Solução
 
+```mermaid
+---
+config:
+  layout: elk
+---
+graph TB
+    subgraph Cliente["👤 Cliente"]
+        Usuario["Usuário"]
+        Navegador["🌐 Navegador/Web"]
+        Usuario --> Navegador
+    end
+
+    subgraph Aplicacao["⚙️ Aplicação FastAPI"]
+        subgraph API["API"]
+            REST["REST API<br/>GET /health<br/>POST /posts<br/>PUT /posts/{id}<br/>DELETE /posts/{id}"]
+            GraphQL["GraphQL<br/>Consulta getPosts"]
+        end
+
+        subgraph Logica["Lógica Interna"]
+            Validacao["Validação<br/>Pydantic Schemas"]
+            Negocios["Regras de Negócio<br/>Routes"]
+            Modelo["Modelo<br/>SQLAlchemy Models"]
+        end
+
+        subgraph Extras["Funcionalidades"]
+            Logs["📝 Logs Estruturados<br/>logging_config.py"]
+            Metricas["📊 Métricas<br/>/metrics<br/>Prometheus"]
+        end
+
+        REST --> Validacao
+        GraphQL --> Validacao
+        Validacao --> Negocios
+        Negocios --> Modelo
+        Modelo --> Metricas
+        Modelo --> Logs
+    end
+
+    subgraph BD["🗄️ Banco de Dados"]
+        SQLAlchemy["SQLAlchemy"]
+        PostgreSQL["PostgreSQL"]
+        SQLAlchemy --> PostgreSQL
+    end
+
+    subgraph Observabilidade["📈 Observabilidade"]
+        Prometheus["Prometheus<br/>Coleta de Métricas"]
+        Grafana["Grafana<br/>Visualização"]
+        Prometheus --> Grafana
+    end
+
+    subgraph DevOps["🚀 CI/CD - DevOps"]
+        GitHub["GitHub"]
+        Actions["GitHub Actions<br/>Pipeline CI"]
+        Steps["✓ Checkout<br/>✓ Docker Compose<br/>✓ Build<br/>✓ Black<br/>✓ Pytest 90%<br/>✓ Encerrar"]
+        GitHub --> Actions
+        Actions --> Steps
+    end
+
+    subgraph Docker["🐳 Containers"]
+        ContainerAPI["FastAPI"]
+        ContainerDB["PostgreSQL"]
+        ContainerProm["Prometheus"]
+        ContainerGraf["Grafana"]
+    end
+
+    subgraph Testes["🧪 Testes"]
+        Unitarios["Unitários"]
+        Integracao["Integração"]
+        E2E["End-to-End"]
+        Mutacao["Mutação"]
+    end
+
+    Navegador -->|REST/GraphQL| REST
+    Navegador -->|REST/GraphQL| GraphQL
+    Modelo --> SQLAlchemy
+    Metricas --> Prometheus
+    Grafana -->|Dashboard| Metricas
+    Steps --> Docker
+    Docker --> Testes
+    Testes --> Actions
+
+    classDef clienteStyle stroke:#38bdf8,fill:#f0f9ff,stroke-width:2px,border-radius:10px
+    classDef appStyle stroke:#a78bfa,fill:#f5f3ff,stroke-width:2px,border-radius:10px
+    classDef bdStyle stroke:#2dd4bf,fill:#f0fdfa,stroke-width:2px,border-radius:10px
+    classDef obsStyle stroke:#facc15,fill:#fefce8,stroke-width:2px,border-radius:10px
+    classDef devopsStyle stroke:#f87171,fill:#fef2f2,stroke-width:2px,border-radius:10px
+    classDef dockerStyle stroke:#fb923c,fill:#fff7ed,stroke-width:2px,border-radius:10px
+    classDef testStyle stroke:#4ade80,fill:#f0fdf4,stroke-width:2px,border-radius:10px
+
+    class Cliente clienteStyle
+    class Aplicacao appStyle
+    class API appStyle
+    class Logica appStyle
+    class Extras appStyle
+    class BD bdStyle
+    class Observabilidade obsStyle
+    class DevOps devopsStyle
+    class Docker dockerStyle
+    class Testes testStyle
+```
+---
 # 📚 Tecnologias Utilizadas
 
 - FastAPI
