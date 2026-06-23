@@ -88,3 +88,7 @@ def test_e2e_crud_post_rest_graphql():
     posts = graphql_response.json()["data"]["getPosts"]
 
     assert not any(post["id"] == post_id for post in posts)
+
+
+#Teste 
+#docker compose exec api python -m pytest tests/e2e -v

@@ -40,3 +40,6 @@ def test_delete_post_not_found():
     response = client.delete("/posts/99999")
 
     assert response.status_code == 404
+
+#Teste 
+#docker compose exec api python -m pytest tests/integracao -v

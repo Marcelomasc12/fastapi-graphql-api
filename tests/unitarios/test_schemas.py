@@ -54,3 +54,7 @@ def test_post_update_conteudo_muito_curto():
             title="Post atualizado",
             content="abc",
         )
+
+
+#Teste
+#docker compose exec api python -m pytest tests/unitarios -v

@@ -1,68 +1,115 @@
-# FastAPI + GraphQL API
+# Desenvolvimento de uma API REST e GraphQL com FastAPI
 
-Projeto desenvolvido para a disciplina de Testes de Software, utilizando FastAPI, GraphQL, PostgreSQL, Docker e Pytest.
-
----
-
-# Objetivo
-# Aula 03
-Validar o funcionamento da aplicação através de:
-
-- Testes de Integração
-- Teste E2E (End-to-End)
-- Teste de Mutação
-- Cobertura de testes
+Projeto desenvolvido para a disciplina **Teste e Qualidade de Software**, utilizando FastAPI para construção de uma API REST e GraphQL, PostgreSQL como banco de dados, Docker para conteinerização, Prometheus e Grafana para observabilidade, testes automatizados e pipeline CI/CD com GitHub Actions.
 
 ---
 
-# Estrutura do Projeto
+## 👨‍💻 Alunos
 
-```
-fastapi-graphql-api
+- Marcelo Negrão Mascarenhas
+- Luisa Castro
+
+**Professor:** Neuton Melo
+
+**Disciplina:** Teste e Qualidade de Software
+
+---
+
+# 📚 Tecnologias Utilizadas
+
+- FastAPI
+- GraphQL (Strawberry GraphQL)
+- SQLAlchemy
+- PostgreSQL
+- Docker
+- Docker Compose
+- Prometheus
+- Grafana
+- Pytest
+- Black
+- GitHub Actions
+
+---
+
+# 📂 Estrutura do Projeto
+
+```text
+.
+├── .github/
+│   └── workflows/
+│       └── ci.yml              # Pipeline CI/CD
 │
-├── .github
-│   └── workflows
-│       └── ci.yml
+├── app/
+│   ├── database.py             # Conexão com PostgreSQL
+│   ├── external_service.py      # Serviço externo
+│   ├── graphql_schema.py        # Schema GraphQL
+│   ├── logging_config.py        # Configuração de logs
+│   ├── main.py                  # Inicialização da aplicação
+│   ├── metrics.py               # Métricas Prometheus
+│   ├── models.py                # Modelos SQLAlchemy
+│   ├── routes.py                # Endpoints REST
+│   └── schemas.py               # Schemas Pydantic
 │
-├── .vscode
+├── observability/
+│   └── prometheus.yml           # Configuração do Prometheus
 │
-├── app
-│   ├── __init__.py
-│   ├── database.py
-│   ├── external_service.py
-│   ├── graphql_schema.py
-│   ├── main.py
-│   ├── models.py
-│   ├── routes.py
-│   └── schemas.py
+├── tests/
+│   ├── e2e/
+│   ├── integracao/
+│   ├── mutacao/
+│   └── unitarios/
 │
-├── tests
-│   │
-│   ├── integracao
-│   │   ├── __init__.py
-│   │   ├── test_external_service.py
-│   │   ├── test_graphql.py
-│   │   └── test_routes.py
-│   │
-│   ├── e2e
-│   │   ├── __init__.py
-│   │   └── test_e2e_graphql.py
-│   │
-│   └── mutacao
-│       ├── __init__.py
-│       ├── relatorio_mutacao.md
-│       └── test_mutacao_fluxo_completo.py
-│
-├── .gitignore
-├── docker-compose.yml
 ├── Dockerfile
-├── README.md
-└── requirements.txt
+├── docker-compose.yml
+├── requirements.txt
+└── README.md
 ```
 
 ---
 
-# Subir os Containers
+# 🚀 Funcionalidades
+
+## API REST
+
+- GET /health
+- POST /posts
+- PUT /posts/{id}
+- DELETE /posts/{id}
+
+## GraphQL
+
+- Consulta de posts
+- Resolvers GraphQL
+
+## Observabilidade
+
+- Endpoint `/metrics`
+- Prometheus
+- Dashboards Grafana
+
+## Banco de Dados
+
+- PostgreSQL
+- SQLAlchemy ORM
+
+## Testes
+
+- Testes Unitários
+- Testes de Integração
+- Testes End-to-End (E2E)
+- Testes de Mutação
+
+## Qualidade
+
+- Black (formatação)
+- Cobertura mínima de 90%
+- Pipeline CI/CD
+
+---
+
+# 🐳 Executando o Projeto
+
+## Subir os containers
 
 ```bash
 docker compose up -d --build
@@ -70,7 +117,7 @@ docker compose up -d --build
 
 ---
 
-# Parar os Containers
+## Parar os containers
 
 ```bash
 docker compose down
@@ -78,7 +125,33 @@ docker compose down
 
 ---
 
-# Executar todos os testes
+# 🧪 Executando os Testes
+
+## Testes Unitários
+
+```bash
+docker compose exec api python -m pytest tests/unitarios -v
+```
+
+## Testes de Integração
+
+```bash
+docker compose exec api python -m pytest tests/integracao -v
+```
+
+## Testes E2E
+
+```bash
+docker compose exec api python -m pytest tests/e2e -v
+```
+
+## Testes de Mutação
+
+```bash
+docker compose exec api python -m pytest tests/mutacao -v -s
+```
+
+## Todos os Testes
 
 ```bash
 docker compose exec api python -m pytest tests -v
@@ -86,147 +159,117 @@ docker compose exec api python -m pytest tests -v
 
 ---
 
-# Executar apenas os testes de Integração
+# 📊 Cobertura de Testes
 
 ```bash
-docker compose exec api python -m pytest tests/integracao -v
+docker compose exec api python -m pytest tests --cov=app --cov-report=term-missing --cov-fail-under=90
 ```
 
 ---
 
-# Executar apenas o teste E2E
+# 🎨 Formatação do Código
+
+## Verificar
 
 ```bash
-docker compose exec api python -m pytest tests/e2e/test_e2e_graphql.py -v
+docker compose exec api black --check app tests
+```
+
+## Formatar
+
+```bash
+docker compose exec api black app tests
 ```
 
 ---
 
-# Executar apenas o teste de Mutação
+# 📈 Observabilidade
 
-```bash
-docker compose exec api python -m pytest tests/mutacao/test_mutacao_fluxo_completo.py -v -s
+Após iniciar o projeto:
+
+Aplicação
+
+```
+http://localhost:8000
 ```
 
-O parâmetro `-s` permite visualizar o resultado do teste de mutação no terminal.
+Swagger
+
+```
+http://localhost:8000/docs
+```
+
+GraphQL
+
+```
+http://localhost:8000/graphql
+```
+
+Métricas
+
+```
+http://localhost:8000/metrics
+```
+
+Prometheus
+
+```
+http://localhost:9090
+```
+
+Grafana
+
+```
+http://localhost:3000
+```
 
 ---
 
-# Executar todos os testes com cobertura
+# 📌 Pipeline CI/CD
 
-```bash
-docker compose exec api python -m pytest tests --cov=app --cov-report=term-missing --cov-fail-under=90 -v
-```
+A pipeline é executada automaticamente a cada Push e Pull Request para a branch principal.
 
-Esse comando exibe:
+Ela realiza:
 
-- Quantidade de testes executados;
-- Cobertura individual de cada arquivo da aplicação;
-- Cobertura total do projeto;
-- Falha caso a cobertura seja inferior a 90%.
-
----
-
-# Atualizar Dependências
-
-Após adicionar uma nova biblioteca ao `requirements.txt`, reconstruir os containers:
-
-```bash
-docker compose up -d --build
-```
+- Checkout do projeto
+- Build dos containers Docker
+- Verificação da formatação com Black
+- Execução dos testes automatizados
+- Validação da cobertura mínima de 90%
+- Encerramento dos containers
 
 ---
 
-# Atualizar a Pipeline
+# 📊 Observabilidade
 
-Após concluir as alterações:
+A aplicação exporta métricas utilizando o Prometheus Client.
 
-```bash
-git add .
-git commit -m "Aula 3 - Testes E2E e Mutação"
-git push origin main
-```
+Algumas métricas implementadas:
 
-A pipeline do GitHub Actions será executada automaticamente.
-
----
-
-# Testes Implementados
-
-## Testes de Integração
-
-- Rotas REST
+- Total de requisições
+- Posts criados
+- Posts atualizados
+- Posts removidos
 - Consultas GraphQL
-- Serviço externo (Mock)
+- Quantidade de posts cadastrados
+- Operações de negócio
+
+Essas métricas são coletadas pelo Prometheus e apresentadas em dashboards no Grafana.
 
 ---
 
-## Teste E2E
+# 📝 Logs
 
-Fluxo completo validado:
+A aplicação possui configuração de logging utilizando o módulo `logging` do Python.
 
-```
-Criar Post (REST)
-        ↓
-Salvar no Banco
-        ↓
-Consultar pelo GraphQL
-        ↓
-Atualizar Post (REST)
-        ↓
-Consultar novamente pelo GraphQL
-        ↓
-Excluir Post (REST)
-        ↓
-Confirmar remoção pelo GraphQL
+Os logs podem ser visualizados com:
+
+```bash
+docker compose logs -f api
 ```
 
 ---
 
-## Teste de Mutação
+# 📄 Licença
 
-Foi inserido propositalmente o seguinte bug:
-
-```python
-posts = db.query(PostModel).all()
-```
-
-foi alterado para
-
-```python
-posts = []
-```
-
-Após inserir a mutação, o teste E2E é executado automaticamente.
-
-Resultado esperado:
-
-```
-========== TESTE DE MUTAÇÃO ==========
-Mutação aplicada: GraphQL retorna lista vazia.
-Resultado do E2E: FAILED (esperado)
-Conclusão: O E2E detectou o bug.
-```
-
-Isso demonstra que o teste E2E consegue identificar alterações que quebram o comportamento esperado da aplicação.
-
----
-
-# Tecnologias Utilizadas
-
-- Python 3.12
-- FastAPI
-- GraphQL (Strawberry)
-- SQLAlchemy
-- PostgreSQL
-- Docker
-- Docker Compose
-- Pytest
-- Pytest-Cov
-
----
-
-# Autores
-
-- Marcelo Negrão Mascarenhas
-- Luisa Castro
+Projeto desenvolvido exclusivamente para fins acadêmicos na disciplina **Teste e Qualidade de Software**.

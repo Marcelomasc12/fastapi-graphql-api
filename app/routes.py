@@ -48,7 +48,7 @@ def update_post(post_id: int, post: PostUpdate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(existing_post)
 
-    posts_atualizados_total.inc()
+    posts_atualizados_total.inc()  # incremantação
     business_operations_total.labels(operation="update_post").inc()
     posts_ativos.set(db.query(PostModel).count())
 
